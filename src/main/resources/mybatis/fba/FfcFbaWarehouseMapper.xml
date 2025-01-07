@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.pengsou.fba.mapper.FfcFbaWarehouseMapper">
+
+    <resultMap type="FfcFbaWarehouse" id="FfcFbaWarehouseResult">
+        <result property="id"    column="id"    />
+        <result property="company"    column="company"    />
+        <result property="companyCode"    column="companyCode"    />
+        <result property="country"    column="country"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="address"    column="address"    />
+        <result property="postalCode"    column="postal_code"    />
+        <result property="moduleType"    column="moduleType"    />
+        <result property="remote"    column="remote"    />
+    </resultMap>
+
+    <sql id="selectFfcFbaWarehouseVo">
+        select id, company, companyCode, country, province, city, address, postal_code, create_by, create_time ,moduleType,remote from ffc_fba_warehouse
+    </sql>
+
+    <select id="selectFfcFbaWarehouseList" parameterType="FfcFbaWarehouse" resultMap="FfcFbaWarehouseResult">
+        <include refid="selectFfcFbaWarehouseVo"/>
+        <where>
+            <if test="searchContent != null and searchContent.trim() != ''">
+                <bind name="pattern" value="'%' + searchContent + '%'"/>
+                and (
+                company like #{pattern} or
+                companyCode like #{pattern} or
+                country like #{pattern} or
+                province like #{pattern} or
+                city like #{pattern} or
+                address like #{pattern} or
+                postal_code like #{pattern} or
+                moduleType like #{pattern} or
+                remote like #{pattern}
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="selectFfcFbaWarehouseById" parameterType="Long" resultMap="FfcFbaWarehouseResult">
+        <include refid="selectFfcFbaWarehouseVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectFbaInfoByPost" parameterType="String" resultMap="FfcFbaWarehouseResult" >
+        <include refid="selectFfcFbaWarehouseVo"/>
+        where postal_code like concat(#{poseFirst}, '%')
+    </select>
+
+    <insert id="insertFfcFbaWarehouse" parameterType="FfcFbaWarehouse" useGeneratedKeys="true" keyProperty="id">
+        insert into ffc_fba_warehouse
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="company != null">company,</if>
+            <if test="companyCode != null">companyCode,</if>
+            <if test="country != null">country,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="address != null">address,</if>
+            <if test="postalCode != null">postal_code,</if>
+            <if test="moduleType != null">moduleType,</if>
+            <if test="remote != null">remote,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="company != null">#{company},</if>
+            <if test="companyCode != null">#{companyCode},</if>
+            <if test="country != null">#{country},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="address != null">#{address},</if>
+            <if test="postalCode != null">#{postalCode},</if>
+            <if test="moduleType != null">#{moduleType},</if>
+            <if test="remote != null">#{remote},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertImageInfo" parameterType="String">
+        insert into company_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyName != null">company,</if>
+            <if test="link != null">link,</if>
+            <if test="uploadPath != null">file_path,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyName != null">#{companyName},</if>
+            <if test="link != null">#{link},</if>
+            <if test="uploadPath != null">#{uploadPath},</if>
+        </trim>
+    </insert>
+
+    <update id="updateFfcFbaWarehouse" parameterType="FfcFbaWarehouse">
+        update ffc_fba_warehouse
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="company != null">company = #{company},</if>
+            <if test="companyCode != null">companyCode = #{companyCode},</if>
+            <if test="country != null">country = #{country},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="postalCode != null">address = #{postalCode},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFfcFbaWarehouseById" parameterType="Long">
+        delete from ffc_fba_warehouse where id = #{id}
+    </delete>
+
+    <delete id="deleteFfcFbaWarehouseByIds" parameterType="String">
+        delete from ffc_fba_warehouse where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

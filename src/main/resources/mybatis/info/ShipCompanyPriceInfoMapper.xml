@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.pengsou.info.mapper.ShipCompanyPriceInfoMapper">
+
+    <resultMap type="ShipCompanyPriceInfo" id="ShipCompanyPriceInfoResult">
+        <result property="id"    column="id"    />
+        <result property="pId"    column="p_id"    />
+        <result property="whichCompany"    column="which_company"    />
+        <result property="shipCompanyName"    column="ship_company_name"    />
+        <result property="volumePrice"    column="volume_price"    />
+        <result property="weightPrice"    column="weight_price"    />
+        <result property="effectiveness"    column="effectiveness"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectShipCompanyPriceInfoVo">
+        select id, p_id, which_company, ship_company_name, volume_price, weight_price, effectiveness, country, create_by, create_time, update_by, update_time from ship_company_price_info
+    </sql>
+
+    <select id="selectShipCompanyPriceInfoList" parameterType="ShipCompanyPriceInfo" resultMap="ShipCompanyPriceInfoResult">
+        <include refid="selectShipCompanyPriceInfoVo"/>
+        <where>
+            <if test="pId != null "> and p_id = #{pId}</if>
+            <if test="whichCompany != null  and whichCompany != ''"> and which_company = #{whichCompany}</if>
+            <if test="shipCompanyName != null  and shipCompanyName != ''"> and ship_company_name like concat('%', #{shipCompanyName}, '%')</if>
+            <if test="volumePrice != null  and volumePrice != ''"> and volume_price = #{volumePrice}</if>
+            <if test="weightPrice != null  and weightPrice != ''"> and weight_price = #{weightPrice}</if>
+            <if test="effectiveness != null  and effectiveness != ''"> and effectiveness = #{effectiveness}</if>
+            <!--            <if test="country != null  and country != ''"> and country = #{country}</if>-->
+        </where>
+    </select>
+
+    <select id="selectShipCompanyPriceInfoById" parameterType="Long" resultMap="ShipCompanyPriceInfoResult">
+        <include refid="selectShipCompanyPriceInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertShipCompanyPriceInfo" parameterType="ShipCompanyPriceInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into ship_company_price_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pId != null">p_id,</if>
+            <if test="whichCompany != null">which_company,</if>
+            <if test="shipCompanyName != null">ship_company_name,</if>
+            <if test="volumePrice != null">volume_price,</if>
+            <if test="weightPrice != null">weight_price,</if>
+            <if test="effectiveness != null">effectiveness,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pId != null">#{pId},</if>
+            <if test="whichCompany != null">#{whichCompany},</if>
+            <if test="shipCompanyName != null">#{shipCompanyName},</if>
+            <if test="volumePrice != null">#{volumePrice},</if>
+            <if test="weightPrice != null">#{weightPrice},</if>
+            <if test="effectiveness != null">#{effectiveness},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateShipCompanyPriceInfo" parameterType="ShipCompanyPriceInfo">
+        update ship_company_price_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pId != null">p_id = #{pId},</if>
+            <if test="whichCompany != null">which_company = #{whichCompany},</if>
+            <if test="shipCompanyName != null">ship_company_name = #{shipCompanyName},</if>
+            <if test="volumePrice != null">volume_price = #{volumePrice},</if>
+            <if test="weightPrice != null">weight_price = #{weightPrice},</if>
+            <if test="effectiveness != null">effectiveness = #{effectiveness},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteShipCompanyPriceInfoById" parameterType="Long">
+        delete from ship_company_price_info where id = #{id}
+    </delete>
+
+    <delete id="deleteShipCompanyPriceInfoByIds" parameterType="String">
+        delete from ship_company_price_info where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

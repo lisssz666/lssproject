@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.pengsou.cabin.mapper.FfcCabinPushRepository">
+
+    <resultMap id="ffcCabinPushResultMap" type="com.ruoyi.project.pengsou.cabin.domain.FfcCabinPush">
+        <id property="id" column="id" />
+        <result property="subject" column="subject" />
+        <result property="logoPath" column="logo" />
+        <result property="content" column="content" />
+        <result property="link" column="link" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <insert id="saveCabinPush" parameterType="FfcCabinPush" useGeneratedKeys="true" keyProperty="id">
+        insert into ffc_cabin_push
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subject != null">subject,</if>
+            <if test="link != null">link,</if>
+            <if test="logoPath != null">logo,</if>
+            <if test="content != null">content,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="subject != null">#{subject},</if>
+            <if test="link != null">#{link},</if>
+            <if test="logoPath != null">#{logoPath},</if>
+            <if test="content != null">#{content},</if>
+        </trim>
+    </insert>
+
+    <select id="findAllCabinPush" resultMap="ffcCabinPushResultMap">
+        select id, subject, logo, content, link, create_time, update_by, update_time
+        from ffc_cabin_push
+        <where>
+            <if test="searchContent != null and searchContent.trim() != ''">
+                <bind name="pattern" value="'%' + searchContent + '%'"/>
+                and (
+                subject like #{pattern} or
+                content like #{pattern}
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="findById" resultMap="ffcCabinPushResultMap">
+        select id, subject, logo, content, link, create_time, update_by, update_time
+        from ffc_cabin_push where id = #{id}
+    </select>
+
+    <delete id="deleteById" parameterType="Long">
+        delete from ffc_cabin_push where id= #{id}
+    </delete>
+
+</mapper>

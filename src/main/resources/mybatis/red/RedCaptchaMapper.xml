@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.red.mapper.RedCaptchaMapper">
+    
+    <resultMap type="RedCaptcha" id="RedCaptchaResult">
+        <result property="captchaId"    column="captcha_id"    />
+        <result property="captchaKey"    column="captcha_key"    />
+        <result property="captchaCode"    column="captcha_code"    />
+        <result property="captchaExpiration"    column="captcha_expiration"    />
+        <result property="captchaUtil"    column="captcha_util"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="expreationTime"    column="expreation_time"    />
+    </resultMap>
+
+    <sql id="selectRedCaptchaVo">
+        select captcha_id, captcha_key, captcha_code, captcha_expiration, captcha_util, create_by, create_time, expreation_time from red_captcha
+    </sql>
+
+    <select id="selectRedCaptchaList" parameterType="RedCaptcha" resultMap="RedCaptchaResult">
+        <include refid="selectRedCaptchaVo"/>
+        <where>  
+            <if test="captchaKey != null  and captchaKey != ''"> and captcha_key = #{captchaKey}</if>
+            <if test="captchaCode != null  and captchaCode != ''"> and captcha_code = #{captchaCode}</if>
+            <if test="captchaExpiration != null "> and captcha_expiration = #{captchaExpiration}</if>
+            <if test="captchaUtil != null  and captchaUtil != ''"> and captcha_util = #{captchaUtil}</if>
+            <if test="expreationTime != null "> and expreation_time = #{expreationTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectRedCaptchaByCaptchaId" parameterType="Long" resultMap="RedCaptchaResult">
+        <include refid="selectRedCaptchaVo"/>
+        where captcha_id = #{captchaId}
+    </select>
+    
+    <select id="selectRedCaptchaByCaptchaKey" parameterType="String" resultMap="RedCaptchaResult">
+        <include refid="selectRedCaptchaVo"/>
+        where captcha_key = #{captchaKey}
+    </select>
+        
+    <insert id="insertRedCaptcha" parameterType="RedCaptcha" useGeneratedKeys="true" keyProperty="captchaId">
+        insert into red_captcha
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="captchaKey != null">captcha_key,</if>
+            <if test="captchaCode != null">captcha_code,</if>
+            <if test="captchaExpiration != null">captcha_expiration,</if>
+            <if test="captchaUtil != null">captcha_util,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="expreationTime != null">expreation_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="captchaKey != null">#{captchaKey},</if>
+            <if test="captchaCode != null">#{captchaCode},</if>
+            <if test="captchaExpiration != null">#{captchaExpiration},</if>
+            <if test="captchaUtil != null">#{captchaUtil},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="expreationTime != null">#{expreationTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRedCaptcha" parameterType="RedCaptcha">
+        update red_captcha
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="captchaKey != null">captcha_key = #{captchaKey},</if>
+            <if test="captchaCode != null">captcha_code = #{captchaCode},</if>
+            <if test="captchaExpiration != null">captcha_expiration = #{captchaExpiration},</if>
+            <if test="captchaUtil != null">captcha_util = #{captchaUtil},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="expreationTime != null">expreation_time = #{expreationTime},</if>
+        </trim>
+        where captcha_id = #{captchaId}
+    </update>
+
+    <delete id="deleteRedCaptchaByCaptchaId" parameterType="Long">
+        delete from red_captcha where captcha_id = #{captchaId}
+    </delete>
+
+    <delete id="deleteRedCaptchaByCaptchaIds" parameterType="String">
+        delete from red_captcha where captcha_id in 
+        <foreach item="captchaId" collection="array" open="(" separator="," close=")">
+            #{captchaId}
+        </foreach>
+    </delete>
+</mapper>

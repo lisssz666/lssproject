@@ -1,0 +1,110 @@
+
+/*fba数据去重*/
+delete from ffc_fba_warehouse where id not in (SELECT a.id  FROM(select max(id) as id from ffc_fba_warehouse group by company,companyCode,country,province,city,address,postal_code,
+moduleType,remote) as a);
+
+/*fba数据去重,companyCode不能重复*/
+delete from ffc_fba_warehouse where id not in (
+SELECT a.id  FROM(select max(id) as id from ffc_fba_warehouse
+group by companyCode) as a
+);
+
+-- 向sys_user中添加字段
+ALTER TABLE sys_user ADD COLUMN vip_day_remaining datetime(0) DEFAULT NULL COMMENT '会员充值时间';
+
+DROP TABLE IF EXISTS `ffc_remote_address`;
+CREATE TABLE `ffc_remote_address` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '快递',
+  `express` varchar(100) DEFAULT '' COMMENT '快递',
+  `country` varchar(100) DEFAULT '' COMMENT '国家',
+  `companyCode` varchar(100) DEFAULT '' COMMENT '代码',
+  `postal_code_low` varchar(50) DEFAULT '' COMMENT '邮政编码低',
+  `postal_code_high` varchar(50) DEFAULT '' COMMENT '邮政编码高',
+  `city` varchar(200) DEFAULT '' COMMENT '市',
+  `origin_surcharge` varchar(200) DEFAULT '' COMMENT '始发地附加费',
+  `destination_surcharge` varchar(200) DEFAULT '' COMMENT '目的地附加费',
+  `create_by` varchar(64) DEFAULT '' COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='偏远地址表';
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+/*公司图片信息表*/
+drop table if exists company_info;
+create table company_info (
+  id           bigint(20)      not null auto_increment    comment 'id',
+	company           varchar(50)      default null     comment '公司名称',
+  link         varchar(50)      default null                  comment '链接',
+  file_path         varchar(500)     default null                 comment '文件路径',
+  create_by         varchar(64)     default ''                 comment '创建者',
+  create_time 	    timestamp     NULL   default CURRENT_TIMESTAMP                          comment '创建时间',
+  update_by         varchar(64)     default ''                 comment '更新者',
+  update_time       timestamp        NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP   comment '更新时间',
+  primary key (id)
+) engine=innodb auto_increment=200 comment = '公司信息';
+
+/*船公司价格表*/
+drop table if exists ship_company_price_info;
+create table ship_company_price_info (
+  id           bigint(20)      not null auto_increment    comment 'id',
+	p_id           bigint(20)      default null     comment '父id',
+	which_company           varchar(50)      default null     comment '海卡/海派',
+  ship_company_name         varchar(50)      default null                  comment '船公司名称',
+  volume_price         varchar(200)     default null                 comment '体积价格',
+	weight_price         varchar(200)     default null                 comment '重量价格',
+	effectiveness         varchar(100)     default null                 comment '实效',
+	country         varchar(100)     default null                 comment '国家',
+  create_by         varchar(64)     default ''                 comment '创建者',
+  create_time 	    timestamp     NULL   default CURRENT_TIMESTAMP                          comment '创建时间',
+  update_by         varchar(64)     default ''                 comment '更新者',
+  update_time       timestamp        NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP   comment '更新时间',
+  primary key (id)
+) engine=innodb auto_increment=200 comment = '船公司价格信息';
+
+
+/*广告图片表*/
+drop table if exists ad_picture;
+create table ad_picture (
+  id           bigint(20)      not null auto_increment    comment 'id',
+  link           varchar(50)      default null     comment '链接',
+  file_path         varchar(500)     default null                 comment '文件路径',
+  title           varchar(255)     default null                 comment '标题',
+  content         text            default null                 comment '内容',
+  sign        int(50)            default null                 comment '区分小程序广告',
+  create_by         varchar(64)     default ''                 comment '创建者',
+  create_time 	    timestamp     NULL   default CURRENT_TIMESTAMP                          comment '创建时间',
+  update_by         varchar(64)     default ''                 comment '更新者',
+  update_time       timestamp        NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP   comment '更新时间',
+  primary key (id)
+) engine=innodb auto_increment=200 comment = '广告图片';
+
+drop table if exists ffc_business_card;
+CREATE TABLE ffc_business_card (
+    id   bigint(20)  not null auto_increment    comment 'id',
+    name VARCHAR(50) NOT NULL COMMENT '姓名',
+    position VARCHAR(50) COMMENT '职位',
+    company VARCHAR(100) COMMENT '公司',
+    business_scope TEXT COMMENT '业务范围',
+    avatar_image VARCHAR(255) COMMENT '头像图片',
+    phone VARCHAR(20) COMMENT '电话',
+    QQ VARCHAR(20) COMMENT 'QQ',
+    wechat VARCHAR(50) COMMENT '微信',
+    create_time 	    timestamp     NULL   default CURRENT_TIMESTAMP  comment '创建时间',
+    update_by  varchar(64)     default ''  comment '更新者',
+    update_time   timestamp   NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP   comment '更新时间'
+    primary key (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='业务名片信息表';
+
+
+CREATE TABLE `ffc_cabin_push` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `subject` VARCHAR(255) NOT NULL COMMENT '主题',
+  `logo` VARCHAR(255) COMMENT '图片',
+  `content` TEXT COMMENT '内容',
+  `link` VARCHAR(255) COMMENT '链接',
+	create_time 	    timestamp     NULL   default CURRENT_TIMESTAMP  comment '创建时间',
+   update_by  varchar(64)     default ''  comment '更新者',
+    update_time   timestamp   NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP   comment '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='舱位推送表';

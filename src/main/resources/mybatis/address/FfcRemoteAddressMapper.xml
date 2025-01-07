@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.pengsou.address.mapper.FfcRemoteAddressMapper">
+
+    <resultMap type="FfcRemoteAddress" id="FfcRemoteAddressResult">
+        <result property="id"    column="id"    />
+        <result property="express"    column="express"    />
+        <result property="country"    column="country"    />
+        <result property="companyCode"    column="companyCode"    />
+        <result property="postalCodeLow"    column="postal_code_low"    />
+        <result property="postalCodeHigh"    column="postal_code_high"    />
+        <result property="city"    column="city"    />
+        <result property="originSurcharge"    column="origin_surcharge"    />
+        <result property="destinationSurcharge"    column="destination_surcharge"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectFfcRemoteAddressVo">
+        select id, express, country, companyCode, postal_code_low, postal_code_high, city, origin_surcharge, destination_surcharge, create_by, create_time from ffc_remote_address
+    </sql>
+
+    <select id="selectFfcRemoteAddressList" parameterType="FfcRemoteAddress" resultMap="FfcRemoteAddressResult">
+        <include refid="selectFfcRemoteAddressVo"/>
+        <where>
+            <if test="searchContent != null and searchContent.trim() != ''">
+                <bind name="pattern" value="'%' + searchContent + '%'"/>
+                and (
+                postal_code_low like #{pattern} or
+                postal_code_high like #{pattern}
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="selectFfcRemoteAddressById" parameterType="Long" resultMap="FfcRemoteAddressResult">
+        <include refid="selectFfcRemoteAddressVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectIfRemote" resultType="java.lang.Integer">
+        SELECT 1 FROM ffc_remote_address
+        <where>
+            <if test="country != null and country.trim() != ''">
+                AND country =#{country}
+            </if>
+            <if test="postalCodeLow != null and postalCodeLow.trim() != ''">
+                AND (postal_code_low =#{postalCodeLow} or postal_code_high = #{postalCodeLow})
+            </if>
+            <if test="express != null and express.trim() != ''">
+                AND express =#{express}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <insert id="insertFfcRemoteAddress" parameterType="FfcRemoteAddress" useGeneratedKeys="true" keyProperty="id">
+        insert into ffc_remote_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="express != null">express,</if>
+            <if test="country != null">country,</if>
+            <if test="companyCode != null">companyCode,</if>
+            <if test="postalCodeLow != null">postal_code_low,</if>
+            <if test="postalCodeHigh != null">postal_code_high,</if>
+            <if test="city != null">city,</if>
+            <if test="originSurcharge != null">origin_surcharge,</if>
+            <if test="destinationSurcharge != null">destination_surcharge,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="express != null">#{express},</if>
+            <if test="country != null">#{country},</if>
+            <if test="companyCode != null">#{companyCode},</if>
+            <if test="postalCodeLow != null">#{postalCodeLow},</if>
+            <if test="postalCodeHigh != null">#{postalCodeHigh},</if>
+            <if test="city != null">#{city},</if>
+            <if test="originSurcharge != null">#{originSurcharge},</if>
+            <if test="destinationSurcharge != null">#{destinationSurcharge},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateFfcRemoteAddress" parameterType="FfcRemoteAddress">
+        update ffc_remote_address
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="express != null">express = #{express},</if>
+            <if test="country != null">country = #{country},</if>
+            <if test="companyCode != null">companyCode = #{companyCode},</if>
+            <if test="postalCodeLow != null">postal_code_low = #{postalCodeLow},</if>
+            <if test="postalCodeHigh != null">postal_code_high = #{postalCodeHigh},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="originSurcharge != null">origin_surcharge = #{originSurcharge},</if>
+            <if test="destinationSurcharge != null">destination_surcharge = #{destinationSurcharge},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFfcRemoteAddressById" parameterType="Long">
+        delete from ffc_remote_address where id = #{id}
+    </delete>
+
+    <delete id="deleteFfcRemoteAddressByIds" parameterType="String">
+        delete from ffc_remote_address where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

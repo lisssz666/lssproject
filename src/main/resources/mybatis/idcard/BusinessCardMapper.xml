@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.pengsou.idcard.mapper.BusinessCardMapper">
+
+    <resultMap id="BusinessCardResultMap" type="com.ruoyi.project.pengsou.idcard.domain.BusinessCard">
+        <!-- 主键映射 -->
+        <id column="id" property="id" />
+        <!-- 其他字段映射 -->
+        <result column="name" property="name" />
+        <result column="position" property="position" />
+        <result column="company" property="company" />
+        <result column="business_scope" property="businessScope" />
+        <result column="avatar_image" property="avatarImage" />
+        <result column="phone" property="phone" />
+        <result column="qq" property="qq" />
+        <result column="wechat" property="wechat" />
+    </resultMap>
+    <!-- 插入操作 -->
+    <insert id="addBusinessCard" parameterType="BusinessCard" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO ffc_business_card (
+            name,
+            position,
+            company,
+            business_scope,
+            avatar_image,
+            phone,
+            qq,
+            wechat
+        ) VALUES (
+            #{name},
+            #{position},
+            #{company},
+            #{businessScope},
+            #{avatarImage},
+            #{phone},
+            #{qq},
+            #{wechat}
+        )
+    </insert>
+
+    <update id="updateBusinessCard" parameterType="BusinessCard">
+        UPDATE ffc_business_card
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="company != null">company = #{company},</if>
+            <if test="businessScope != null">business_scope = #{businessScope},</if>
+            <if test="avatarImage != null">avatar_image = #{avatarImage},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="qq != null">qq = #{qq},</if>
+            <if test="wechat != null">wechat = #{wechat},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+
+    <select id="findAllBusinessCard" parameterType="BusinessCard" resultMap="BusinessCardResultMap">
+        SELECT
+            id,
+            name,
+            position,
+            company,
+            business_scope,
+            avatar_image,
+            phone,
+            qq,
+            wechat
+        FROM
+            ffc_business_card
+        <where>
+            <if test="searchContent != null and searchContent.trim() != ''">
+                <bind name="pattern" value="'%' + searchContent + '%'"/>
+                and (
+                name like #{pattern} or
+                position like #{pattern} or
+                company like #{pattern}
+                )
+            </if>
+        </where>
+
+    </select>
+
+    <delete id="deleteBusinessCard">
+        delete from ffc_business_card where id = #{id}
+    </delete>
+
+</mapper>

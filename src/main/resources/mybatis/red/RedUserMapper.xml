@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.red.mapper.RedUserMapper">
+    
+    <resultMap type="RedUser" id="RedUserResult">
+        <result property="redUserId"    column="reduser_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userKey"    column="user_key"    />
+        <result property="sysuser"    column="sysuser"    />
+        <result property="logininfo"    column="logininfo"    />
+        <result property="permissions"    column="permissions"    />
+        <result property="captchaExpiration"    column="captcha_expiration"    />
+        <result property="captchaUtil"    column="captcha_util"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="expreationTime"    column="expreation_time"    />
+    </resultMap>
+
+    <sql id="selectRedUserVo">
+        select reduser_id, user_id, user_key, sysuser, logininfo, permissions, captcha_expiration, captcha_util, create_by, create_time, expreation_time from red_user
+    </sql>
+
+    <select id="selectRedUserList" parameterType="RedUser" resultMap="RedUserResult">
+        <include refid="selectRedUserVo"/>
+        <where>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="userKey != null  and userKey != ''"> and user_key = #{userKey}</if>
+            <if test="sysuser != null  and sysuser != ''"> and sysuser = #{sysuser}</if>
+            <if test="logininfo != null  and logininfo != ''"> and logininfo = #{logininfo}</if>
+            <if test="permissions != null  and permissions != ''"> and permissions = #{permissions}</if>
+            <if test="captchaExpiration != null "> and captcha_expiration = #{captchaExpiration}</if>
+            <if test="captchaUtil != null  and captchaUtil != ''"> and captcha_util = #{captchaUtil}</if>
+            <if test="expreationTime != null "> and expreation_time = #{expreationTime}</if>
+        </where>
+    </select>
+
+    <select id="selectRedUserById" parameterType="Long" resultMap="RedUserResult">
+        <include refid="selectRedUserVo"/>
+        where reduser_id = #{redUserId}
+    </select>
+
+    <select id="selectRedUserByUserId" parameterType="Long" resultMap="RedUserResult">
+        <include refid="selectRedUserVo"/>
+        where user_id = #{userId}
+    </select>
+    
+    <select id="selectRedUserByUserKey" parameterType="String" resultMap="RedUserResult">
+        <include refid="selectRedUserVo"/>
+        where user_key = #{userKey}
+    </select>
+        
+    <insert id="insertRedUser" parameterType="RedUser" useGeneratedKeys="true" keyProperty="userId">
+        insert into red_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="userKey != null">user_key,</if>
+            <if test="sysuser != null">sysuser,</if>
+            <if test="logininfo != null">logininfo,</if>
+            <if test="permissions != null">permissions,</if>
+            <if test="captchaExpiration != null">captcha_expiration,</if>
+            <if test="captchaUtil != null">captcha_util,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="expreationTime != null">expreation_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="userKey != null">#{userKey},</if>
+            <if test="sysuser != null">#{sysuser},</if>
+            <if test="logininfo != null">#{logininfo},</if>
+            <if test="permissions != null">#{permissions},</if>
+            <if test="captchaExpiration != null">#{captchaExpiration},</if>
+            <if test="captchaUtil != null">#{captchaUtil},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="expreationTime != null">#{expreationTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRedUser" parameterType="RedUser">
+        update red_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_key = #{userId},</if>
+            <if test="userKey != null">user_key = #{userKey},</if>
+            <if test="sysuser != null">sysuser = #{sysuser},</if>
+            <if test="logininfo != null">logininfo = #{logininfo},</if>
+            <if test="permissions != null">permissions = #{permissions},</if>
+            <if test="captchaExpiration != null">captcha_expiration = #{captchaExpiration},</if>
+            <if test="captchaUtil != null">captcha_util = #{captchaUtil},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="expreationTime != null">expreation_time = #{expreationTime},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deleteRedUserByUserId" parameterType="Long">
+        delete from red_user where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteRedUserByUserIds" parameterType="String">
+        delete from red_user where user_id in 
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteRedUserByUserKey" parameterType="String">
+        delete from red_user where user_key = #{userKey}
+    </delete>
+    
+</mapper>

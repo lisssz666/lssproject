@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.pengsou.adpicture.mapper.AdPictureMapper">
+
+    <resultMap type="AdPicture" id="AdPictureResult">
+        <result property="id"    column="id"    />
+        <result property="link"    column="link"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="sign"    column="sign"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectAdPictureVo">
+        select id, link, file_path, title, content, sign, create_by, create_time, update_by, update_time from ad_picture
+    </sql>
+
+    <select id="selectAdPictureList" parameterType="AdPicture" resultMap="AdPictureResult">
+        <include refid="selectAdPictureVo"/>
+        <where>
+            <if test="searchContent != null and searchContent.trim() != ''">
+                <bind name="pattern" value="'%' + searchContent + '%'"/>
+                and (
+                link like #{pattern} or
+                title like #{pattern} or
+                file_path like #{pattern} or
+                content like #{pattern} or
+                sign like #{pattern}
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAdPictureById" parameterType="Long" resultMap="AdPictureResult">
+        <include refid="selectAdPictureVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertImageInfo">
+        insert into ad_picture
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="link != null">link,</if>
+            <if test="filePath != null">file_path,</if>
+            <if test="title != null">title,</if>
+            <if test="content != null">content,</if>
+            <if test="sign != null">sign,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="link != null">#{link},</if>
+            <if test="filePath != null">#{filePath},</if>
+            <if test="title != null">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="sign != null">#{sign},</if>
+        </trim>
+    </insert>
+    <update id="editAd">
+        update ad_picture
+        <set>
+            <if test="link != null">link = #{link},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="sign != null">sign = #{sign},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+
+    <delete id="deleteAdPictureById" parameterType="Long">
+        delete from ad_picture where id = #{id}
+    </delete>
+
+    <delete id="deleteAdPictureByIds" parameterType="String">
+        delete from ad_picture where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
