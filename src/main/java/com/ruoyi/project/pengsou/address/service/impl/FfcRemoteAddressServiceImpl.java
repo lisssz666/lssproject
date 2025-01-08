@@ -23,7 +23,7 @@ public class FfcRemoteAddressServiceImpl implements IFfcRemoteAddressService {
 
     @Override
     public List<FfcRemoteAddress> selectFfcRemoteAddressList(FfcRemoteAddress paramFfcRemoteAddress) {
-        return null;
+        return ffcRemoteAddressMapper.selectFfcRemoteAddressList(paramFfcRemoteAddress);
     }
 
 

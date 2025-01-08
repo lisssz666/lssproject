@@ -28,8 +28,12 @@
             <if test="searchContent != null and searchContent.trim() != ''">
                 <bind name="pattern" value="'%' + searchContent + '%'"/>
                 and (
-                postal_code_low like #{pattern} or
-                postal_code_high like #{pattern}
+                express like #{pattern} or
+                country like #{pattern} or
+                companyCode like #{pattern} or
+                city like #{pattern} or
+                postalCodeLow like #{pattern} or
+                postalCodeHigh like #{pattern}
                 )
             </if>
         </where>
