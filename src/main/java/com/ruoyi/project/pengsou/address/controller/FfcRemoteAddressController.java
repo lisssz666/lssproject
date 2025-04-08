@@ -13,6 +13,8 @@ import com.ruoyi.project.pengsou.address.service.IFfcRemoteAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
+
 @RestController
 @RequestMapping({"/cms/address"})
 public class FfcRemoteAddressController extends BaseController {

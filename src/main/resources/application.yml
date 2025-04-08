@@ -20,10 +20,10 @@ server:
   # 服务器的HTTP端口，默认为8080
   port: 8089
   ssl:
-    key-store: classpath:www.c486.com.pfx
+    key-store: classpath:c486.com.pfx
     key-store-type: PKCS12
-    key-store-password: 0x7tgt3799et2oe
-    key-alias: www.c486.com
+    key-store-password: h2b6626624odw
+    key-alias: c486.com
   servlet:
     # 应用的访问路径
     context-path: /
